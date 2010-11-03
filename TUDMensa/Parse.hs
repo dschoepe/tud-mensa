@@ -13,8 +13,6 @@ import Text.StringLike
 import TUDMensa.Types
 import Safe
 
-import Debug.Trace
-
 rowCount :: Int
 rowCount = 9
 
@@ -72,5 +70,3 @@ parseType _ = Unknown
 maybeAttrib :: (StringLike str, Show str, Eq str) => str -> Tag str -> Maybe str
 maybeAttrib att (TagOpen _ atts) = lookup att atts
 maybeAttrib _ _ = Nothing
-
-test f = fmap (f . parseTags) $ readFile "test.html"

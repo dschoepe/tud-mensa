@@ -35,7 +35,7 @@ annotateOpts opts@Options{..} =
                 in case date of
                   Today -> enum [today, week]
                   _ -> enum [week, today]
-       , hide = hide &= typ "[Type of Meal]"
+       , hide = hide &= typ "Type of Meal"
                 &= help hideHelp
        , printDayMenu = printDayMenu &= ignore
        , printWeekMenu = printWeekMenu &= ignore
@@ -45,7 +45,7 @@ annotateOpts opts@Options{..} =
   &= program "mensa" &= summary "tud-mensa 0.1"
     where dateHelp = "Show menu for entire week or just today"
           hideHelp = "Don't show these types of food in the result. "++
-                     "If specified multiple times all specified types will be hidden"
+                     "If specified multiple times all specified types will be hidden."
           showAllHelp = "Ignore filtering options. This is only useful if you set default "++
                         "filtering options in your config file."
 defaultOpts :: Options
