@@ -1,6 +1,7 @@
 {-# LANGUAGE DeriveDataTypeable, RecordWildCards #-}
 module TUDMensa (defaultOpts, ppDayMenu, ppWeekMenu,
                  tudMensa, getMenu, getMenuFiltered,
+                 Options(..),
                  module TUDMensa.Types)
        where
 
