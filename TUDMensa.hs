@@ -24,6 +24,7 @@ data Options = Options { date :: Date
                        , printDayMenu :: DayMenu -> String -- ^ function to print daily menus
                        , printWeekMenu :: WeekMenu -> String -- ^ function to print weekly menus
                        , filterMeals :: WeekMenu -> IO WeekMenu -- ^ custom filtering function for meals
+                       , showAll :: Bool -- ^ show all meals, regardless of hide and filterMeals
                        } deriving (Data, Typeable)
 
 -- | Annotates options for use with cmdargs
@@ -39,17 +40,21 @@ annotateOpts opts@Options{..} =
        , printDayMenu = printDayMenu &= ignore
        , printWeekMenu = printWeekMenu &= ignore
        , filterMeals = filterMeals &= ignore
+       , showAll = showAll &= help showAllHelp &= explicit &= name "all"
        }
   &= program "mensa" &= summary "tud-mensa 0.1"
     where dateHelp = "Show menu for entire week or just today"
           hideHelp = "Don't show these types of food in the result. "++
                      "If specified multiple times all specified types will be hidden"
+          showAllHelp = "Ignore filtering options. This is only useful if you set default "++
+                        "filtering options in your config file."
 defaultOpts :: Options
 defaultOpts = Options { date = Today
                       , hide = []
                       , printDayMenu = ppDayMenu
                       , printWeekMenu = ppWeekMenu
                       , filterMeals = return
+                      , showAll = False
                       }
 
 -- | Retrieve and parse menu for current week
@@ -58,7 +63,9 @@ getMenu = parseWeek `fmap` getWeekly
 
 -- | Filter the menu according to given options
 filterByOpts :: Options -> WeekMenu -> IO WeekMenu
-filterByOpts (Options{..}) = filterMeals . everywhere (mkT $ filter byType)
+filterByOpts (Options{..})
+  | showAll = return
+  | otherwise = filterMeals . everywhere (mkT $ filter byType)
   where byType = (`notElem` hide) . mealType
 
 -- | Filter menu according to options
@@ -71,7 +78,7 @@ handleCommand opts@(Options{..}) | date == Today = do
                     utcToLocalZonedTime =<< getCurrentTime
   menu <- getMenuFiltered opts
   if dayOfWeek >= 6
-    then putStrLn "It's weekend!"
+    then putStrLn "It's weekend! No crappy cafeteria food today."
     else case M.lookup (toEnum dayOfWeek) menu of
            Just daymenu -> putStrLn (printDayMenu daymenu)
                    | date == Week = putStrLn . printWeekMenu =<< getMenuFiltered opts
