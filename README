@@ -1,2 +1,21 @@
 This program displays the TU Darmstadt cafeteria menu on the command
 line. For usage information see mensa --help.
+
+Additional customization is possible by altering/creating
+~/.confg/tud-mensa/tud-mensa.hs which is a Haskell file that should
+contain alternate code for the `main' function. This code would result
+in the same behaviour as without configuration:
+
+> import TUDMensa
+
+> main = tudMensa defaultOpts
+
+To set a default, e.g. always ignore fish-based dishes, the file can
+be altered like this:
+
+> import TUDMensa
+> main = tudMensa defaultOpts { hide = [Fish] }
+
+Those customization options require GHC to be installed.
+For other customization options, refer to the haddock documentation of
+this program.

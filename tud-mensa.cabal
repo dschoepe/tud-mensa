@@ -31,7 +31,7 @@ Author:              Daniel Schoepe
 Maintainer:          daniel.schoepe@googlemail.com
 
 -- A copyright notice.
--- Copyright:           
+-- Copyright:
 
 Category:            Web
 
@@ -39,24 +39,28 @@ Build-type:          Simple
 
 -- Extra files to be distributed with the package, such as examples or
 -- a README.
--- Extra-source-files:  
+-- Extra-source-files:
 
 -- Constraint on the version of Cabal needed to build this package.
 Cabal-version:       >=1.2
 
 
-Executable mensa
-  -- .hs or .lhs file containing the Main module.
-  Main-is:             Main.hs
-  
+Library
   -- Packages needed in order to build this package.
   Build-depends:       tagsoup == 0.11.*, base == 4.*, containers == 0.3.*,
                        HTTP == 4000.*, cmdargs == 0.6.*, regex-compat >= 0.92 && < 0.94,
-                       syb == 0.1.*, safe == 0.2.*, time == 1.1.*
-  
+                       syb == 0.1.*, safe == 0.2.*, time == 1.1.*, dyre == 0.8.5
+
   -- Modules not exported by this package.
-  Other-modules:       Mensa.Types, Mensa.Get, Mensa.Parse
-  
+  Exposed-modules:     TUDMensa, TUDMensa.Types, TUDMensa.Get, TUDMensa.Parse
+
   -- Extra tools (e.g. alex, hsc2hs, ...) needed to build the source.
-  -- Build-tools:         
-  
+  -- Build-tools:
+
+Executable mensa
+  Main-is:             Main.hs
+
+  Build-depends:       tagsoup == 0.11.*, base == 4.*, containers == 0.3.*,
+                       HTTP == 4000.*, cmdargs == 0.6.*, regex-compat >= 0.92 && < 0.94,
+                       syb == 0.1.*, safe == 0.2.*, time == 1.1.*, dyre == 0.8.5
+  Other-modules:       TUDMensa.Types, TUDMensa.Get, TUDMensa.Parse
