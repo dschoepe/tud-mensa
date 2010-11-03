@@ -79,7 +79,7 @@ handleCommand opts@(Options{..}) | date == Today = do
   menu <- getMenuFiltered opts
   if dayOfWeek >= 6
     then putStrLn "It's weekend! No crappy cafeteria food today."
-    else case M.lookup (toEnum dayOfWeek) menu of
+    else case M.lookup (toEnum (dayOfWeek - 1)) menu of
            Just daymenu -> putStrLn (printDayMenu daymenu)
                    | date == Week = putStrLn . printWeekMenu =<< getMenuFiltered opts
 
