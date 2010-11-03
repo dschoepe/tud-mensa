@@ -73,15 +73,16 @@ getMenuFiltered :: Options -> IO WeekMenu
 getMenuFiltered opts = filterByOpts opts =<< getMenu
 
 handleCommand :: Options -> IO ()
-handleCommand opts@(Options{..}) | date == Today = do
+handleCommand opts@(Options{..})
+  | date == Today = do
   (_,_,dayOfWeek) <- fmap (toWeekDate . localDay . zonedTimeToLocalTime) .
                     utcToLocalZonedTime =<< getCurrentTime
   menu <- getMenuFiltered opts
   if dayOfWeek >= 6
     then putStrLn "It's weekend! No crappy cafeteria food today."
     else case M.lookup (toEnum (dayOfWeek - 1)) menu of
-           Just daymenu -> putStrLn (printDayMenu daymenu)
-                   | date == Week = putStrLn . printWeekMenu =<< getMenuFiltered opts
+           Just daymenu -> putStr (printDayMenu daymenu)
+  | date == Week = putStr . printWeekMenu =<< getMenuFiltered opts
 
 -- | Default pretty-printer for week menu
 ppWeekMenu :: WeekMenu -> String
