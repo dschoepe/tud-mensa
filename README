@@ -2,7 +2,7 @@ This program displays the TU Darmstadt cafeteria menu on the command
 line. For usage information see mensa --help.
 
 Additional customization is possible by altering/creating
-~/.confg/tud-mensa/tud-mensa.hs which is a Haskell file that should
+~/.config/tud-mensa/tud-mensa.hs which is a Haskell file that should
 contain alternate code for the `main' function. This code would result
 in the same behaviour as without configuration:
 
