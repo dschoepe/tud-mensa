@@ -10,10 +10,12 @@ Name:                tud-mensa
 Version:             0.1
 
 -- A short (one-line) description of the package.
--- Synopsis:            
+Synopsis:            Program to display the TU Darmstadt cafeteria menu on the command line
 
 -- A longer description of the package.
--- Description:         
+Description:         This program retrieves, parses and displays the cafeteria menu from
+                     TU Darmstadt on the command line and has a limited capability of filtering
+                     out types of meals.
 
 -- The license under which the package is released.
 License:             BSD3

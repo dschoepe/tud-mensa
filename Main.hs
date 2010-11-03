@@ -17,7 +17,9 @@ data Options = Options { date :: Date
 opts = Options { date = enum [Today &= help "Show data for today"
                              ,Week &= help "Show data for entire week"]
                , hide = def &= typ "[Type of Meal]"
-                            &= help "Don't show these types of food" }
+                            &= help hideHelp }
+  where hideHelp = "Don't show these types of food in the result. "++
+                   "If specified multiple times all specified types will be hidden"
 
 instance Default MealType where
   def = Vegetarian
