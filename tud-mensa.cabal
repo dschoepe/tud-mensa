@@ -62,5 +62,5 @@ Executable mensa
 
   Build-depends:       tagsoup == 0.11.*, base == 4.*, containers == 0.3.*,
                        HTTP == 4000.*, cmdargs == 0.6.*, regex-compat >= 0.92 && < 0.94,
-                       syb == 0.1.*, safe == 0.2.*, time == 1.1.*, dyre == 0.8.5
+                       syb == 0.1.*, safe == 0.2.*, time == 1.1.*, dyre == 0.8.*
   Other-modules:       TUDMensa.Types, TUDMensa.Get, TUDMensa.Parse
