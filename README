@@ -17,5 +17,5 @@ be altered like this:
 > main = tudMensa defaultOpts { hide = [Fish] }
 
 Those customization options require GHC to be installed.
-For other customization options, refer to the haddock documentation of
+For more customization options, refer to the haddock documentation of
 this program.

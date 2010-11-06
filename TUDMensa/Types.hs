@@ -22,3 +22,5 @@ data Day = Monday | Tuesday | Wednesday | Thursday | Friday
          deriving (Ord, Show, Enum, Eq, Data, Typeable)
 
 type WeekMenu = M.Map Day DayMenu
+
+data Date = NextWeek | ThisWeek | Today deriving (Data, Typeable, Show, Eq, Enum)

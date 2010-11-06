@@ -13,12 +13,12 @@ import Control.Monad
 import qualified Config.Dyre as Dyre
 import System.Console.CmdArgs
 import Data.Generics
+import Data.List
 import Data.Time
 import Data.Time.Calendar.WeekDate
 import Text.Printf
 import qualified Data.Map as M
 
-data Date = Week | Today deriving (Data, Typeable, Show, Eq)
 data Options = Options { date :: Date
                        , hide :: [MealType] -- ^ types of values to hide
                        , printDayMenu :: DayMenu -> String -- ^ function to print daily menus
@@ -30,11 +30,7 @@ data Options = Options { date :: Date
 -- | Annotates options for use with cmdargs
 annotateOpts :: Options -> Options
 annotateOpts opts@Options{..} =
-  opts { date = let today = Today &= help "Show menu for today"
-                    week = Week &= help "Show menu for entire week"
-                in case date of
-                  Today -> enum [today, week]
-                  _ -> enum [week, today]
+  opts { date = enum . map annotateDate $ date : ([NextWeek .. Today] \\ [date])
        , hide = hide &= typ "Type of Meal"
                 &= help hideHelp
        , printDayMenu = printDayMenu &= ignore
@@ -48,6 +44,9 @@ annotateOpts opts@Options{..} =
                      "If specified multiple times all specified types will be hidden."
           showAllHelp = "Ignore filtering options. This is only useful if you set default "++
                         "filtering options in your config file."
+          annotateDate Today = Today &= help "Show menu for today"
+          annotateDate ThisWeek = ThisWeek &= explicit &= name "week" &= help "Show menu for this week"
+          annotateDate NextWeek = NextWeek &= help "Show menu for next week"
 defaultOpts :: Options
 defaultOpts = Options { date = Today
                       , hide = []
@@ -58,8 +57,8 @@ defaultOpts = Options { date = Today
                       }
 
 -- | Retrieve and parse menu for current week
-getMenu :: IO WeekMenu
-getMenu = parseWeek `fmap` getWeekly
+getMenu :: Date -> IO WeekMenu
+getMenu = fmap parseWeek . getWeekly
 
 -- | Filter the menu according to given options
 filterByOpts :: Options -> WeekMenu -> IO WeekMenu
@@ -70,7 +69,7 @@ filterByOpts (Options{..})
 
 -- | Filter menu according to options
 getMenuFiltered :: Options -> IO WeekMenu
-getMenuFiltered opts = filterByOpts opts =<< getMenu
+getMenuFiltered opts = filterByOpts opts =<< getMenu (date opts)
 
 handleCommand :: Options -> IO ()
 handleCommand opts@(Options{..})
@@ -82,7 +81,7 @@ handleCommand opts@(Options{..})
     then putStrLn "It's weekend! No crappy cafeteria food today."
     else case M.lookup (toEnum (dayOfWeek - 1)) menu of
            Just daymenu -> putStr (printDayMenu daymenu)
-  | date == Week = putStr . printWeekMenu =<< getMenuFiltered opts
+  | date `elem` [ThisWeek, NextWeek] = putStr . printWeekMenu =<< getMenuFiltered opts
 
 -- | Default pretty-printer for week menu
 ppWeekMenu :: WeekMenu -> String

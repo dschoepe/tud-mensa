@@ -1,4 +1,3 @@
-{-# LANGUAGE NoMonomorphismRestriction #-}
 module TUDMensa.Parse (prettify, parseWeek) where
 
 import Control.Arrow
@@ -55,7 +54,7 @@ prettify m = m { dish = removeSoupIntro . removeNewline . removePrice $ dish m }
   where removePrice str = regsub " [A-Z]+ [0-9],[0-9]{2}.*" str ""
         removeNewline str = regsub " *\128 ?\n+" str ""
         removeSoupIntro str = regsub "Von unserer Suppenbar! *" str ""
-        regsub expr = subRegex (mkRegex expr)
+        regsub = subRegex . mkRegex
 
 parseType :: String -> MealType
 parseType "rindschwein" = BeefAndPork
