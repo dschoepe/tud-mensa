@@ -36,7 +36,7 @@ annotateOpts opts@Options{..} =
        , printDayMenu = printDayMenu &= ignore
        , printWeekMenu = printWeekMenu &= ignore
        , filterMeals = filterMeals &= ignore
-       , showAll = showAll &= help showAllHelp &= explicit &= name "all"
+       , showAll = showAll &= help showAllHelp &= explicit &= name "all" &= name "a"
        }
   &= program "mensa" &= summary "tud-mensa 0.1"
   &= details ["http://github.com/dschoepe/tud-mensa"]
@@ -46,7 +46,8 @@ annotateOpts opts@Options{..} =
           showAllHelp = "Ignore filtering options. This is only useful if you set default "++
                         "filtering options in your config file."
           annotateDate Today = Today &= help "Show menu for today"
-          annotateDate ThisWeek = ThisWeek &= explicit &= name "week" &= help "Show menu for this week"
+          annotateDate ThisWeek = ThisWeek &= explicit &= name "week"
+                                  &= help "Show menu for this week" &= name "w"
           annotateDate NextWeek = NextWeek &= help "Show menu for next week"
           annotateDate x = x &= help ("Missing help text for "++show x++". Please file a bug about this")
 
