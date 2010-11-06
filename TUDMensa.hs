@@ -39,6 +39,7 @@ annotateOpts opts@Options{..} =
        , showAll = showAll &= help showAllHelp &= explicit &= name "all"
        }
   &= program "mensa" &= summary "tud-mensa 0.1"
+  &= details ["http://github.com/dschoepe/tud-mensa"]
     where dateHelp = "Show menu for entire week or just today"
           hideHelp = "Don't show these types of food in the result. "++
                      "If specified multiple times all specified types will be hidden."
@@ -47,6 +48,8 @@ annotateOpts opts@Options{..} =
           annotateDate Today = Today &= help "Show menu for today"
           annotateDate ThisWeek = ThisWeek &= explicit &= name "week" &= help "Show menu for this week"
           annotateDate NextWeek = NextWeek &= help "Show menu for next week"
+          annotateDate x = x &= help ("Missing help text for "++show x++". Please file a bug about this")
+
 defaultOpts :: Options
 defaultOpts = Options { date = Today
                       , hide = []
