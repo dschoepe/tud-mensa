@@ -8,7 +8,7 @@ data Meal = Meal { dish ::  String
                  , mealType :: MealType } deriving (Show, Eq, Ord, Data, Typeable)
 
 data MealType = Poultry | Pork | Beef | BeefAndPork | Fish | Vegetarian |
-                Lamb | Unknown
+                Lamb | Venison | Unknown
               deriving (Show, Eq, Ord, Data, Typeable, Enum)
 
 data DayMenu = DayMenu { bistro :: [Meal]

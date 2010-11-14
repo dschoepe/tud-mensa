@@ -64,6 +64,7 @@ parseType "fleischlos" = Vegetarian
 parseType "fisch" = Fish
 parseType "lamm" = Lamb
 parseType "gefluegel" = Poultry
+parseType "wild" = Venison
 parseType _ = Unknown
 
 maybeAttrib :: (StringLike str, Show str, Eq str) => str -> Tag str -> Maybe str
