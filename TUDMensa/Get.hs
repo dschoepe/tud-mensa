@@ -1,5 +1,6 @@
 module TUDMensa.Get (getWeekly) where
 
+import Control.Applicative
 import TUDMensa.Types
 import Network.HTTP
 import Text.HTML.TagSoup
@@ -12,4 +13,5 @@ weeklyUrl NextWeek = getRequest $ baseUrl ++ "nextweek"
 weeklyUrl _ = getRequest $ baseUrl ++ "week"
 
 getWeekly :: Date -> IO [Tag String]
-getWeekly = fmap (parseTags . either (const []) rspBody) . simpleHTTP . weeklyUrl
+getWeekly =
+  fmap (parseTags . either (const []) rspBody) . simpleHTTP . weeklyUrl

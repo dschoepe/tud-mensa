@@ -5,7 +5,8 @@ import qualified Data.Map as M
 import Data.Generics
 
 data Meal = Meal { dish ::  String
-                 , mealType :: MealType } deriving (Show, Eq, Ord, Data, Typeable)
+                 , mealType :: MealType }
+          deriving (Show, Eq, Ord, Data, Typeable)
 
 data MealType = Poultry | Pork | Beef | BeefAndPork | Fish | Vegetarian |
                 Lamb | Venison | Unknown
@@ -23,4 +24,5 @@ data Day = Monday | Tuesday | Wednesday | Thursday | Friday
 
 type WeekMenu = M.Map Day DayMenu
 
-data Date = NextWeek | ThisWeek | Today deriving (Data, Typeable, Show, Eq, Enum)
+data Date = NextWeek | ThisWeek | Today
+          deriving (Data, Typeable, Show, Eq, Enum)

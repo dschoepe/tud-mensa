@@ -20,11 +20,16 @@ import Text.Printf
 import qualified Data.Map as M
 
 data Options = Options { date :: Date
-                       , hide :: [MealType] -- ^ types of values to hide
-                       , printDayMenu :: DayMenu -> String -- ^ function to print daily menus
-                       , printWeekMenu :: WeekMenu -> String -- ^ function to print weekly menus
-                       , filterMeals :: WeekMenu -> IO WeekMenu -- ^ custom filtering function for meals
-                       , showAll :: Bool -- ^ show all meals, regardless of hide and filterMeals
+                       , hide :: [MealType]
+                         -- ^ types of values to hide
+                       , printDayMenu :: DayMenu -> String
+                         -- ^ function to print daily menus
+                       , printWeekMenu :: WeekMenu -> String
+                         -- ^ function to print weekly menus
+                       , filterMeals :: WeekMenu -> IO WeekMenu
+                         -- ^ custom filtering function for meals
+                       , showAll :: Bool
+                         -- ^ show all meals, regardless of hide and filterMeals
                        } deriving (Data, Typeable)
 
 -- | Annotates options for use with cmdargs
@@ -36,20 +41,22 @@ annotateOpts opts@Options{..} =
        , printDayMenu = printDayMenu &= ignore
        , printWeekMenu = printWeekMenu &= ignore
        , filterMeals = filterMeals &= ignore
-       , showAll = showAll &= help showAllHelp &= explicit &= name "all" &= name "a"
+       , showAll = showAll &= help showAllHelp
+                   &= explicit &= name "all" &= name "a"
        }
   &= program "mensa" &= summary "tud-mensa 0.1"
   &= details ["http://github.com/dschoepe/tud-mensa"]
     where dateHelp = "Show menu for entire week or just today"
-          hideHelp = "Don't show these types of food in the result. "++
-                     "If specified multiple times all specified types will be hidden."
-          showAllHelp = "Ignore filtering options. This is only useful if you set default "++
-                        "filtering options in your config file."
+          hideHelp = "Don't show these types of food in the result. If "++
+                     "specified multiple times all specified types will be hidden."
+          showAllHelp = "Ignore filtering options. This is only useful if "++
+                        "you set default filtering options in your config file."
           annotateDate Today = Today &= help "Show menu for today"
           annotateDate ThisWeek = ThisWeek &= explicit &= name "week"
                                   &= help "Show menu for this week" &= name "w"
           annotateDate NextWeek = NextWeek &= help "Show menu for next week"
-          annotateDate x = x &= help ("Missing help text for "++show x++". Please file a bug about this")
+          annotateDate x = x &= help ("Missing help text for "++show x++
+                                      ". Please file a bug about this")
 
 defaultOpts :: Options
 defaultOpts = Options { date = Today
@@ -85,11 +92,13 @@ handleCommand opts@(Options{..})
     then putStrLn "It's weekend! No crappy cafeteria food today."
     else case M.lookup (toEnum (dayOfWeek - 1)) menu of
            Just daymenu -> putStr (printDayMenu daymenu)
-  | date `elem` [ThisWeek, NextWeek] = putStr . printWeekMenu =<< getMenuFiltered opts
+  | date `elem` [ThisWeek, NextWeek] = putStr . printWeekMenu =<<
+                                       getMenuFiltered opts
 
 -- | Default pretty-printer for week menu
 ppWeekMenu :: WeekMenu -> String
-ppWeekMenu = unlines . concat . M.elems . M.mapWithKey (\day dm -> [show day, ppDayMenu dm])
+ppWeekMenu = unlines . concat . M.elems .
+             M.mapWithKey (\day dm -> [show day, ppDayMenu dm])
 
 -- | Default pretty-printer for day menu
 ppDayMenu :: DayMenu -> String
