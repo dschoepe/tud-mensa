@@ -39,7 +39,7 @@ mealsPerDay = zip [Monday .. Friday] . transpose . map (snd . dissectRow) .
 
 parseWeek :: [Tag String] -> WeekMenu
 parseWeek = M.fromList .
-            everywhere (mkT $ map prettify . filter notEmpty) .
+            everywhere (mkT $ map prettify . filter notEmpty . filter removePizza) .
             map (second toDayMenu) . mealsPerDay
   where toDayMenu (bistro:soup:gabel:wok:ottob) = DayMenu { bistro = [bistro]
                                                           , soup = [soup]
@@ -48,6 +48,7 @@ parseWeek = M.fromList .
                                                           , ottob = ottob }
         toDayMenu xs = DayMenu [] [] [] [] xs -- this shouldn't happen
         notEmpty = not . ("\160\n" `isPrefixOf`) . dish
+        removePizza s = not ("Pizza " `isInfixOf` dish s || "Nudeltheke" `isInfixOf` dish s)
 
 prettify :: Meal -> Meal
 prettify m = m { dish = removeSoupIntro . removeNewline . removePrice $ dish m }
