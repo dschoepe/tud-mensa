@@ -47,9 +47,9 @@ Cabal-version:       >=1.2
 
 Library
   -- Packages needed in order to build this package.
-  Build-depends:       tagsoup == 0.11.*, base == 4.*, containers,
-                       HTTP == 4000.*, cmdargs == 0.6.*, regex-compat >= 0.92 && < 0.94,
-                       syb, safe == 0.2.*, time == 1.1.*, dyre == 0.8.*
+  Build-depends:       tagsoup == 0.12.*, base == 4.*, containers,
+                       HTTP == 4000.*, cmdargs == 0.9.*, regex-compat >= 0.92 && < 0.94,
+                       syb, safe == 0.2.*, time == 1.2.*, dyre == 0.8.*
 
   -- Modules not exported by this package.
   Exposed-modules:     TUDMensa, TUDMensa.Types, TUDMensa.Get, TUDMensa.Parse
@@ -60,7 +60,7 @@ Library
 Executable mensa
   Main-is:             Main.hs
 
-  Build-depends:       tagsoup == 0.11.*, base == 4.*, containers,
-                       HTTP == 4000.*, cmdargs == 0.6.*, regex-compat >= 0.92 && < 0.94,
-                       syb, safe == 0.2.*, time == 1.1.*, dyre == 0.8.*
+  Build-depends:       tagsoup == 0.12.*, base == 4.*, containers,
+                       HTTP == 4000.*, cmdargs == 0.9.*, regex-compat >= 0.92 && < 0.94,
+                       syb, safe == 0.2.*, time == 1.2.*, dyre == 0.8.*
   Other-modules:       TUDMensa.Types, TUDMensa.Get, TUDMensa.Parse
