@@ -53,7 +53,7 @@ parseWeek = M.fromList .
 prettify :: Meal -> Meal
 prettify m = m { dish = removeSoupIntro . removeNewline . removePrice $ dish m }
   where removePrice str = regsub " *[A-Z]+ +[0-9],[0-9]{2} *€*" str ""
-        removeNewline str = regsub " *\128 ?\n+" str ""
+        removeNewline str = regsub "\n" str ""
         removeSoupIntro str = regsub "Von unserer Suppenbar! *" str ""
         regsub = subRegex . mkRegex
 
