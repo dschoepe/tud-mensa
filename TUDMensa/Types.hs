@@ -26,3 +26,6 @@ type WeekMenu = M.Map Day DayMenu
 
 data Date = NextWeek | ThisWeek | Today
           deriving (Data, Typeable, Show, Eq, Enum)
+
+data Location = Stadtmitte | Lichtwiese | Schoefferstrasse | Haardtring | Dieburg
+              deriving (Show, Typeable, Data)
