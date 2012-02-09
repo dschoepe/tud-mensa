@@ -22,6 +22,8 @@ import qualified Data.Map as M
 data Options = Options { date :: Date
                        , hide :: [MealType]
                          -- ^ types of values to hide
+                       , location :: Location
+                         -- ^ location of the canteen
                        , printDayMenu :: DayMenu -> String
                          -- ^ function to print daily menus
                        , printWeekMenu :: WeekMenu -> String
@@ -38,6 +40,7 @@ annotateOpts opts@Options{..} =
   opts { date = enum . map annotateDate $ date : ([NextWeek .. Today] \\ [date])
        , hide = hide &= typ "Type of Meal"
                 &= help hideHelp
+       , location = location &= help locationHelp
        , printDayMenu = printDayMenu &= ignore
        , printWeekMenu = printWeekMenu &= ignore
        , filterMeals = filterMeals &= ignore
@@ -49,18 +52,18 @@ annotateOpts opts@Options{..} =
     where dateHelp = "Show menu for entire week or just today"
           hideHelp = "Don't show these types of food in the result. If "++
                      "specified multiple times all specified types will be hidden."
+          locationHelp = "Specify where you are."
           showAllHelp = "Ignore filtering options. This is only useful if "++
                         "you set default filtering options in your config file."
           annotateDate Today = Today &= help "Show menu for today"
           annotateDate ThisWeek = ThisWeek &= explicit &= name "week"
                                   &= help "Show menu for this week" &= name "w"
           annotateDate NextWeek = NextWeek &= help "Show menu for next week"
-          annotateDate x = x &= help ("Missing help text for "++show x++
-                                      ". Please file a bug about this")
 
 defaultOpts :: Options
 defaultOpts = Options { date = Today
                       , hide = []
+                      , location = Stadtmitte
                       , printDayMenu = ppDayMenu
                       , printWeekMenu = ppWeekMenu
                       , filterMeals = return
@@ -68,8 +71,8 @@ defaultOpts = Options { date = Today
                       }
 
 -- | Retrieve and parse menu for current week
-getMenu :: Date -> IO WeekMenu
-getMenu = fmap parseWeek . getWeekly
+getMenu :: Date -> Location -> IO WeekMenu
+getMenu = (.) (fmap parseWeek) . getWeekly
 
 -- | Filter the menu according to given options
 filterByOpts :: Options -> WeekMenu -> IO WeekMenu
@@ -80,7 +83,7 @@ filterByOpts (Options{..})
 
 -- | Filter menu according to options
 getMenuFiltered :: Options -> IO WeekMenu
-getMenuFiltered opts = filterByOpts opts =<< getMenu (date opts)
+getMenuFiltered opts = filterByOpts opts =<< getMenu (date opts) (location opts)
 
 handleCommand :: Options -> IO ()
 handleCommand opts@(Options{..})
