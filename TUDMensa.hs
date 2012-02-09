@@ -55,8 +55,6 @@ annotateOpts opts@Options{..} =
           annotateDate ThisWeek = ThisWeek &= explicit &= name "week"
                                   &= help "Show menu for this week" &= name "w"
           annotateDate NextWeek = NextWeek &= help "Show menu for next week"
-          annotateDate x = x &= help ("Missing help text for "++show x++
-                                      ". Please file a bug about this")
 
 defaultOpts :: Options
 defaultOpts = Options { date = Today
